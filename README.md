@@ -1,4 +1,4 @@
-# Nextjs OpenJira App
+# Remix OpenJira App
 para correr localmente, se necesita la base de datos en mongo
 ```
 docker-compose up -d

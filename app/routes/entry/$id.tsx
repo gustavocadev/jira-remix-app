@@ -5,7 +5,6 @@ import {
   Button,
   Textarea,
   Box,
-  Text,
 } from "@chakra-ui/react"
 import { Radio, RadioGroup } from "@chakra-ui/react"
 import {
@@ -24,7 +23,7 @@ import { Entry } from "~/context/entries"
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData()
 
-  dbConnect()
+  await dbConnect()
 
   const _action = formData.get("_action") as string
   if (_action === "update") {
@@ -46,21 +45,25 @@ export const action: ActionFunction = async ({ request, params }) => {
     await EntryModel.findByIdAndDelete(id)
   }
 
-  dbDisconnect()
+  await dbDisconnect()
 
   return redirect(`/`)
 }
 
+type LoaderData = {
+  entry: Entry
+}
+
 export const loader: LoaderFunction = async ({ params }) => {
   const { id } = params
-  dbConnect()
-  const entryFound = (await EntryModel.findById(id).lean()) as Entry
-  dbDisconnect()
-  return entryFound
+  await dbConnect()
+  const entry = await EntryModel.findById(id).lean()
+  await dbDisconnect()
+  return { entry }
 }
 
 export default function EntryPage() {
-  const entry = useLoaderData<Entry>()
+  const { entry } = useLoaderData<LoaderData>()
   const [status, setStatus] = useState(entry.status)
   const [inputDescription, setInputDescription] = useState(entry.description)
   return (

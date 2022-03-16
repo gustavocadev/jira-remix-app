@@ -24,6 +24,8 @@ import { Entry } from "~/context/entries"
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData()
 
+  dbConnect()
+
   const _action = formData.get("_action") as string
   if (_action === "update") {
     const { id } = params
@@ -43,6 +45,8 @@ export const action: ActionFunction = async ({ request, params }) => {
     const { id } = params
     await EntryModel.findByIdAndDelete(id)
   }
+
+  dbDisconnect()
 
   return redirect(`/`)
 }

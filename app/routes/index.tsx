@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { EntryList } from "~/components/entries"
 import { Grid } from "@chakra-ui/react"
-import { ActionFunction, LoaderFunction } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { dbConnect, dbDisconnect } from "~/utils/db"
 import EntryModel from "~/models/Entry"
-import { Entry, EntriesContext } from "../context/entries/EntriesContext"
+import { EntriesContext } from "../context/entries/EntriesContext"
+import type { Entry } from "../context/entries/EntriesContext";
 import { useContext, useEffect } from "react"
 
 export const action: ActionFunction = async ({ request }) => {

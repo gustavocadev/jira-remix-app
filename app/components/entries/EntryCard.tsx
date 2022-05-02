@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react"
-import { Entry } from "../../context/entries/EntriesContext"
-import { DragEvent } from "react"
+import type { Entry } from "../../context/entries/EntriesContext"
+import type { DragEvent } from "react"
 import { useFetcher, useNavigate } from "@remix-run/react";
 
 type Props = {

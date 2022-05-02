@@ -7,13 +7,14 @@ import {
   Box,
 } from "@chakra-ui/react"
 import { Radio, RadioGroup } from "@chakra-ui/react"
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
 import { useState } from "react"
 import EntryModel from "../../models/Entry"
 import { dbConnect } from "~/utils/db"
 import { dbDisconnect } from "../../utils/db"
-import { Entry } from "~/context/entries"
+import type { Entry } from "~/context/entries"
 
 export const action: ActionFunction = async ({ request, params }) => {
   const formData = await request.formData()

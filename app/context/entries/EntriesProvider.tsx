@@ -1,6 +1,6 @@
-import { FC, useReducer } from "react"
+import { useReducer } from "react"
 import { EntriesContext, entriesReducer } from "./"
-import { Entry } from "./EntriesContext"
+import type { Entry } from "./EntriesContext"
 
 export interface EntriesState {
   entries: Entry[]
@@ -10,14 +10,18 @@ const entries_INITIAL_STATE: EntriesState = {
   entries: [],
 }
 
-export const EntriesProvider: FC = ({ children }) => {
-  const [state, dispatch] = useReducer(entriesReducer, entries_INITIAL_STATE)
+type Props = {
+  children: React.ReactNode
+}
+
+export const EntriesProvider = ({ children }: Props) => {
+  const [state, dispatch] = useReducer(entriesReducer, entries_INITIAL_STATE);
 
   // actions
   // saveEntriesToState
   const saveEntriesToState = async (entries: Entry[]) => {
-    dispatch({ type: "GET_ENTRIES", payload: entries })
-  }
+    dispatch({ type: "GET_ENTRIES", payload: entries });
+  };
 
   // const updateEntriesToState = async (entries: Entry[]) => {
   //   dispatch({ type: "UPDATE_ENTRIES", payload: entries })
@@ -25,8 +29,8 @@ export const EntriesProvider: FC = ({ children }) => {
 
   // create a new entry
   const addNewEntry = (entry: Entry) => {
-    dispatch({ type: "ADD_ENTRY", payload: entry })
-  }
+    dispatch({ type: "ADD_ENTRY", payload: entry });
+  };
 
   // update an entry
   const updateEntry = (entry: Entry) => {
@@ -35,8 +39,8 @@ export const EntriesProvider: FC = ({ children }) => {
       payload: {
         ...entry,
       },
-    })
-  }
+    });
+  };
 
   return (
     <EntriesContext.Provider
@@ -49,5 +53,5 @@ export const EntriesProvider: FC = ({ children }) => {
     >
       {children}
     </EntriesContext.Provider>
-  )
-}
+  );
+};

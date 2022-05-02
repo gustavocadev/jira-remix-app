@@ -1,5 +1,5 @@
-import { Schema, models, model, Model } from "mongoose"
-import { Entry } from "../context/entries/EntriesContext"
+import { Schema, models, model } from "mongoose"
+import type { Entry } from "../context/entries/EntriesContext"
 
 type EntryTypeMongoDB = Entry
 
@@ -22,7 +22,7 @@ const EntrySchema = new Schema({
   },
 })
 
-const EntryModel: Model<EntryTypeMongoDB> =
-  models.Entry ?? model("Entry", EntrySchema)
+const EntryModel =
+  models.Entry ?? model<EntryTypeMongoDB>("Entry", EntrySchema)
 
 export default EntryModel

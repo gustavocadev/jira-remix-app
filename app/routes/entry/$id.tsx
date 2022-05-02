@@ -7,13 +7,8 @@ import {
   Box,
 } from "@chakra-ui/react"
 import { Radio, RadioGroup } from "@chakra-ui/react"
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useLoaderData,
-} from "remix"
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import { useState } from "react"
 import EntryModel from "../../models/Entry"
 import { dbConnect } from "~/utils/db"

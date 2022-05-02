@@ -2,8 +2,7 @@ import { Box, Button, Heading, Input, Stack } from "@chakra-ui/react"
 import { DragEvent, useContext, useRef, useState, useEffect } from "react"
 import EntryCard from "./EntryCard"
 import { EntriesContext } from "../../context/entries/EntriesContext"
-import { useFetcher } from "remix"
-import { Form, useTransition } from "remix"
+import { Form, useFetcher, useTransition } from "@remix-run/react";
 type Props = {
   status: string
 }

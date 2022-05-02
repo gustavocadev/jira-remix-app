@@ -1,13 +1,7 @@
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "remix"
-import type { MetaFunction } from "remix"
-import { ReactNode, useContext, useEffect } from "react"
+import type { MetaFunction } from "@remix-run/node";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "@remix-run/react";
+import { useContext, useEffect } from "react"
+import type { ReactNode } from "react";
 import { withEmotionCache } from "@emotion/react"
 import { ChakraProvider } from "@chakra-ui/react"
 

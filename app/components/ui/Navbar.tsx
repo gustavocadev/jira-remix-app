@@ -1,5 +1,5 @@
 import { Box, Text } from "@chakra-ui/react"
-import { Link } from "remix"
+import { Link } from "@remix-run/react";
 
 type Props = {}
 

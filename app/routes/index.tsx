@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { EntryList } from "~/components/entries"
 import { Grid } from "@chakra-ui/react"
-import { ActionFunction, LoaderFunction, useLoaderData } from "remix"
+import { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import { dbConnect, dbDisconnect } from "~/utils/db"
 import EntryModel from "~/models/Entry"
 import { Entry, EntriesContext } from "../context/entries/EntriesContext"

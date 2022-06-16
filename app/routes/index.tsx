@@ -1,58 +1,67 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { EntryList } from "~/components/entries"
-import { Grid } from "@chakra-ui/react"
+import { EntryList } from "~/components/entries";
+import { Grid } from "@chakra-ui/react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { dbConnect, dbDisconnect } from "~/utils/db"
-import EntryModel from "~/models/Entry"
-import { EntriesContext } from "../context/entries/EntriesContext"
+import { useLoaderData, useActionData } from "@remix-run/react";
+import { dbConnect, dbDisconnect } from "~/utils/db";
+import EntryModel from "~/models/Entry";
+import { EntriesContext } from "../context/entries/EntriesContext";
 import type { Entry } from "../context/entries/EntriesContext";
-import { useContext, useEffect } from "react"
+import { useContext, useEffect } from "react";
 
 export const action: ActionFunction = async ({ request }) => {
-  console.log("actionnnn 🦕")
-  const formData = await request.formData()
+  console.log("actionnnn 🦕");
+  const formData = await request.formData();
 
-  const _action = formData.get("_action") as string
+  const _action = formData.get("_action") as string;
 
-  await dbConnect()
+  await dbConnect();
   if (_action === "create") {
-    const description = formData.get("description") as string
+    const description = formData.get("description") as string;
+    if (description.length === 0) {
+      return {
+        msg: "the name is required",
+      };
+    }
     const newEntry = new EntryModel({
       description,
-    })
-    await newEntry.save()
+    });
+    await newEntry.save();
   }
   if (_action === "update") {
-    const id = formData.get("_id") as string
-    const status = formData.get("status") as string
+    const id = formData.get("_id") as string;
+    const status = formData.get("status") as string;
     await EntryModel.findByIdAndUpdate(id, {
       status,
-    })
+    });
   }
 
-  await dbDisconnect()
+  await dbDisconnect();
 
   return {
     status: "ok",
-  }
-}
+    msg: "Action executed",
+  };
+};
 
 export const loader: LoaderFunction = async () => {
-  await dbConnect()
-  const entries = (await EntryModel.find().lean()) as Entry[]
-  await dbDisconnect()
+  await dbConnect();
+  const entries = (await EntryModel.find().lean()) as Entry[];
+  await dbDisconnect();
 
-  return entries
-}
+  return entries;
+};
 
 export default function Index() {
-  const entries = useLoaderData<Entry[]>()
-  const { saveEntriesToState } = useContext(EntriesContext)
+  const entries = useLoaderData<Entry[]>();
+  const { saveEntriesToState } = useContext(EntriesContext);
+  const actionData = useActionData<{
+    msg: string;
+  }>();
 
   useEffect(() => {
-    saveEntriesToState(entries)
-  }, [entries])
+    saveEntriesToState(entries);
+  }, [entries]);
 
   return (
     <Grid
@@ -65,9 +74,9 @@ export default function Index() {
       p="4"
       as="section"
     >
-      <EntryList status="pending" />
+      <EntryList status="pending" msg={actionData?.msg} />
       <EntryList status="in-progress" />
       <EntryList status="finished" />
     </Grid>
-  )
+  );
 }

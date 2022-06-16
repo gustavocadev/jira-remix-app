@@ -1,25 +1,26 @@
-import { Box, Button, Heading, Input, Stack } from "@chakra-ui/react"
-import {  useContext, useRef, useState, useEffect } from "react"
-import type { DragEvent } from "react"
-import EntryCard from "./EntryCard"
-import { EntriesContext } from "../../context/entries/EntriesContext"
+import { Box, Button, Heading, Input, Stack, Text } from "@chakra-ui/react";
+import { useContext, useRef, useState, useEffect } from "react";
+import type { DragEvent } from "react";
+import EntryCard from "./EntryCard";
+import { EntriesContext } from "../../context/entries/EntriesContext";
 import { Form, useFetcher, useTransition } from "@remix-run/react";
 type Props = {
-  status: string
-}
+  status: string;
+  msg?: string;
+};
 
-const EntryList = ({ status }: Props) => {
-  const { entries } = useContext(EntriesContext)
-  const [buttonAdd, setButtonAdd] = useState(false)
+const EntryList = ({ status, msg }: Props) => {
+  const { entries } = useContext(EntriesContext);
+  const [buttonAdd, setButtonAdd] = useState(false);
 
-  const formRef = useRef<HTMLFormElement>(null)
-  const transition = useTransition()
-  const fetcher = useFetcher()
+  const formRef = useRef<HTMLFormElement>(null);
+  const transition = useTransition();
+  const fetcher = useFetcher();
 
   // when the user drop the element do this
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    const id = e.dataTransfer.getData("text/plain")
-    const entry = entries.find((entry) => entry._id === id)!
+    const id = e.dataTransfer.getData("text/plain");
+    const entry = entries.find((entry) => entry._id === id)!;
     // console.log({ ...entry, status })
 
     // submit like a form to update in my database every time the status changes
@@ -33,22 +34,22 @@ const EntryList = ({ status }: Props) => {
         method: "post",
         action: "?index",
       }
-    )
+    );
 
     // updateEntry({ ...entry, status })
-  }
+  };
 
-  const filteredEntries = entries.filter((entry) => entry.status === status)
+  const filteredEntries = entries.filter((entry) => entry.status === status);
 
   const isAdding =
     transition.state === "submitting" &&
-    transition.submission.formData.get("_action") === "create"
+    transition.submission.formData.get("_action") === "create";
 
   useEffect(() => {
     if (!isAdding) {
-      formRef.current?.reset()
+      formRef.current?.reset();
     }
-  }, [isAdding])
+  }, [isAdding]);
 
   return (
     <Box
@@ -74,6 +75,7 @@ const EntryList = ({ status }: Props) => {
               name="description"
               autoComplete="off"
             />
+            <Text color="red.500">{msg}</Text>
 
             <Button type="submit" name="_action" value="create">
               Agregar Entrada
@@ -90,12 +92,12 @@ const EntryList = ({ status }: Props) => {
           py="2"
         >
           {filteredEntries.map((entry) => {
-            return <EntryCard key={entry._id} entry={entry} />
+            return <EntryCard key={entry._id} entry={entry} />;
           })}
         </Box>
       </section>
     </Box>
-  )
-}
+  );
+};
 
-export default EntryList
+export default EntryList;

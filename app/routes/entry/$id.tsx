@@ -5,63 +5,70 @@ import {
   Button,
   Textarea,
   Box,
-} from "@chakra-ui/react"
-import { Radio, RadioGroup } from "@chakra-ui/react"
+} from "@chakra-ui/react";
+import { Radio, RadioGroup } from "@chakra-ui/react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useLoaderData } from "@remix-run/react";
-import { useState } from "react"
-import EntryModel from "../../models/Entry"
-import { dbConnect } from "~/utils/db"
-import { dbDisconnect } from "../../utils/db"
-import type { Entry } from "~/context/entries"
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
+import EntryModel from "../../models/Entry";
+import { dbConnect } from "~/utils/db";
+import { dbDisconnect } from "../../utils/db";
+import type { Entry } from "~/context/entries";
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const formData = await request.formData()
+  const formData = await request.formData();
 
-  await dbConnect()
+  await dbConnect();
 
-  const _action = formData.get("_action") as string
+  const _action = formData.get("_action") as string;
   if (_action === "update") {
-    const { id } = params
-    const status = formData.get("status") as string
-    const description = formData.get("description") as string
+    const { id } = params;
+    const status = formData.get("status") as string;
+    const description = formData.get("description") as string;
+
+    if (description.length === 0) {
+      return {
+        msg: "Description is required",
+      };
+    }
 
     const entryUpdated = {
       status,
       description: description.trim(),
-    }
+    };
 
     await EntryModel.findByIdAndUpdate(id, {
       ...entryUpdated,
-    })
+    });
   }
   if (_action === "delete") {
-    const { id } = params
-    await EntryModel.findByIdAndDelete(id)
+    const { id } = params;
+    await EntryModel.findByIdAndDelete(id);
   }
 
-  await dbDisconnect()
+  await dbDisconnect();
 
-  return redirect(`/`)
-}
+  return redirect(`/`);
+};
 
 type LoaderData = {
-  entry: Entry
-}
+  entry: Entry;
+};
 
 export const loader: LoaderFunction = async ({ params }) => {
-  const { id } = params
-  await dbConnect()
-  const entry = await EntryModel.findById(id).lean()
-  await dbDisconnect()
-  return { entry }
-}
+  const { id } = params;
+  await dbConnect();
+  const entry = await EntryModel.findById(id).lean();
+  await dbDisconnect();
+  return { entry };
+};
 
 export default function EntryPage() {
-  const { entry } = useLoaderData<LoaderData>()
-  const [status, setStatus] = useState(entry.status)
-  const [inputDescription, setInputDescription] = useState(entry.description)
+  const { entry } = useLoaderData<LoaderData>();
+
+  const [status, setStatus] = useState(entry.status);
+  const [inputDescription, setInputDescription] = useState(entry.description);
   return (
     <Container
       maxW="container.xl"
@@ -104,14 +111,20 @@ export default function EntryPage() {
             Update: Actualizar
           </Button>
         </Stack>
+        <Box width="100%" marginTop="4">
+          <Form method="post">
+            <Button
+              bg="red.600"
+              type="submit"
+              name="_action"
+              value="delete"
+              width="100%"
+            >
+              Delete - Eliminar
+            </Button>
+          </Form>
+        </Box>
       </Form>
-      <Box>
-        <Form method="post">
-          <Button bg="red.600" type="submit" name="_action" value="delete">
-            Delete - Eliminar
-          </Button>
-        </Form>
-      </Box>
     </Container>
-  )
+  );
 }

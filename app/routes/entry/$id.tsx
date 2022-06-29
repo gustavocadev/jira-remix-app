@@ -9,7 +9,7 @@ import {
 import { Radio, RadioGroup } from "@chakra-ui/react";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 import { useState } from "react";
 import EntryModel from "../../models/Entry";
 import { dbConnect } from "~/utils/db";

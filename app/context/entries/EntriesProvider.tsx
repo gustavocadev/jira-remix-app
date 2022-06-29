@@ -1,18 +1,18 @@
-import { useReducer } from "react"
-import { EntriesContext, entriesReducer } from "./"
-import type { Entry } from "./EntriesContext"
+import { useReducer } from 'react';
+import { EntriesContext, entriesReducer } from './';
+import type { Entry } from './EntriesContext';
 
 export interface EntriesState {
-  entries: Entry[]
+  entries: Entry[];
 }
 
 const entries_INITIAL_STATE: EntriesState = {
   entries: [],
-}
+};
 
 type Props = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 export const EntriesProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(entriesReducer, entries_INITIAL_STATE);
@@ -20,35 +20,19 @@ export const EntriesProvider = ({ children }: Props) => {
   // actions
   // saveEntriesToState
   const saveEntriesToState = async (entries: Entry[]) => {
-    dispatch({ type: "GET_ENTRIES", payload: entries });
+    dispatch({ type: 'GET_ENTRIES', payload: entries });
   };
 
-  // const updateEntriesToState = async (entries: Entry[]) => {
-  //   dispatch({ type: "UPDATE_ENTRIES", payload: entries })
-  // }
-
-  // create a new entry
-  const addNewEntry = (entry: Entry) => {
-    dispatch({ type: "ADD_ENTRY", payload: entry });
-  };
-
-  // update an entry
-  const updateEntry = (entry: Entry) => {
-    dispatch({
-      type: "UPDATE_ENTRY",
-      payload: {
-        ...entry,
-      },
-    });
+  const updateEntriesToState = async (entries: Entry[]) => {
+    dispatch({ type: 'UPDATE_ENTRIES', payload: entries });
   };
 
   return (
     <EntriesContext.Provider
       value={{
         ...state,
-        updateEntry,
-        addNewEntry,
         saveEntriesToState,
+        updateEntriesToState,
       }}
     >
       {children}
